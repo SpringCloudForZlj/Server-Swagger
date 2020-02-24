@@ -6,12 +6,10 @@ import com.xd.swagger.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
@@ -34,6 +32,22 @@ public class UserSwagger {
     })
     @RequestMapping(value = "GetUserById/{userid}",method = RequestMethod.GET)
     public Api GetUserById(@PathVariable(value = "userid") String userid){
+        Api api = new Api();
+        System.out.printf("\n\nid="+userid);
+        User user = userService.selectUserById(userid);
+        api.setCode(200);
+        api.setMessage("成功");
+        api.setData(user);
+        return api;
+    }
+
+    //    根据Id查询用户
+    @ApiOperation(value = "根据Id查询用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid",value = "用户Id",required = true,dataType = "String",paramType = "query")
+    })
+    @RequestMapping(value = "GetUserById",method = RequestMethod.GET)
+    public Api GetUserById1(@RequestParam(value = "userid") String userid){
         Api api = new Api();
         System.out.printf("\n\nid="+userid);
         User user = userService.selectUserById(userid);
